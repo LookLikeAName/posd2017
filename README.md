@@ -40,10 +40,12 @@ On repository page -> Settings -> Webhooks -> Add webhook -> set Payload URL :
 http://140.124.181.114:8080/buildByToken/build?job=<studentId>&token=<studentId>
 ```
 And it should show the green tick.
+
 ![Imgur](https://i.imgur.com/wbjjetV.png)
 
 ### Email your repository url to TA
 Email: posd2017f@gmail.com
+
 ![Imgur](https://i.imgur.com/dEkZk1Q.png)
 
 
