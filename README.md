@@ -1,7 +1,7 @@
 # myProject
 Use the makefile to compile the c++ file and run the test with googleTest.
 
-Follow the steps to complete settings. You need to setup the compile environment on your PC to run the project with test, and add webhook for your repository that can trigger CI server to do the building and running.
+Follow the steps to complete settings. You need to setup the compile environment on your PC to run the project with test, and add webhook for your repository that can trigger CI server to do the building and running automated test.
 
 This project is only used to create the environment, you should clean it when HW1.
 
