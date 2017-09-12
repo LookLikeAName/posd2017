@@ -2,7 +2,7 @@
 Use the makefile to compile the c++ file and run the test with googleTest.
 
 ## 1. How to set up everything on your PC
------
+
 #### Prerequisites
 
 * [Windows 10](https://blog.gtwang.org/windows/how-to-get-ubuntu-and-bash-running-on-windows-10/)
@@ -25,7 +25,6 @@ After run the exp file, you should get the result like that:
 
 
 ## 2. How to set up everything for CI server
------
 
 You already have an account on [the CI server](http://140.124.181.114:8080/). 
 Username and password is your student id, so your need to reset password first.
@@ -52,5 +51,5 @@ Email: posd2017f@gmail.com
 Wait TA for setting, your CI job will be triggered to run test after every push.
 
 ## Done
-----
+
 If you have some problems that u really don't know why and how to solve it, email us: posd2017f@gmail.com or come to 1321 in office hours (Fri. 2pm to 4pm).
