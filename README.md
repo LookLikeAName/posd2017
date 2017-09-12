@@ -32,7 +32,8 @@ Username and password is your student id, so your need to reset password first.
 
 ### Need a new repository
 https://github.com/new
-Place this project to your own repository
+
+Place this project to your own repository. Be careful not to overwrite the .git folder.
 
 ### Add WebHook to repository
 
