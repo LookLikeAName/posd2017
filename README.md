@@ -1,6 +1,8 @@
 # myProject
 Use the makefile to compile the c++ file and run the test with googleTest.
 
+Follow the steps to complete settings. You need to setup the compile environment on your PC to run the project with test, and add webhook that can trigger CI server to do the building and running.
+
 ## 1. How to set up everything on your PC
 
 #### Prerequisites
@@ -46,8 +48,11 @@ And it should show the green tick.
 ![Imgur](https://i.imgur.com/wbjjetV.png)
 
 ### Email your repository url to TA
-Email: posd2017f@gmail.com
+Email to posd2017f@gmail.com. Just need subject, no content required.
 
+```
+Subject: <studentId>, <repositoryURL>
+```
 ![Imgur](https://i.imgur.com/dEkZk1Q.png)
 
 
