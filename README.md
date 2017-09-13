@@ -8,7 +8,7 @@ This project is only used to create the environment, you should clean it when HW
 #### Updata
  * Wed Sep 13 2017 14:12:35
  
- About <studentId>, you should replace whole brackets not just "studentId". That is ok on email subject , but you should be careful the webhook.
+ About \<studentId\>, you should replace whole brackets not just "studentId". That is ok on email subject , but you should be careful the webhook.
   
   ```
   Good:
