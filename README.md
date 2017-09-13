@@ -1,5 +1,5 @@
 # myProject
-Use the makefile to compile the c++ file and run the test with googleTest.
+Use the makefile to compile the c++ file and run the test with [googleTest](https://github.com/google/googletest).
 
 Follow the steps to complete settings. You need to setup the compile environment on your PC to run the project with test, and add webhook for your repository that can trigger [CI server](http://140.124.181.114:8080/) to do the building and running automated test.
 
