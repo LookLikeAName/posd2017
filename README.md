@@ -34,10 +34,10 @@ You already have an account on [the CI server](http://140.124.181.114:8080/).
 Username and password is your student id, so your need to reset password first.
 ![Imgur](https://i.imgur.com/GoYBxXp.png)
 
-### Need a new repository
+### Create a new repository
 https://github.com/new
 
-Place this project to your own repository. Be careful not to overwrite the .git folder.
+Name your repository whatever you want, and place this project's file to your own repository(exclude .git folder).
 
 ### Add WebHook to repository
 
