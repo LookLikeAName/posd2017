@@ -5,6 +5,20 @@ Follow the steps to complete settings. You need to setup the compile environment
 
 This project is only used to create the environment, you should clean it when HW1.
 
+#### Updata
+ * Wed Sep 13 2017 14:12:35
+ 
+ About <studentId>, you should replace whole brackets not just "studentId". That is ok on email subject , but you should be careful the webhook.
+  
+  ```
+  Good:
+  http://140.124.181.114:8080/buildByToken/build?job=1055980XX&token=1055980XX
+  
+  Bad:
+  http://140.124.181.114:8080/buildByToken/build?job=<1055980XX>&token=<1055980XX>
+  ```
+
+
 ## 1. How to set up everything on your PC
 
 #### Prerequisites
@@ -63,4 +77,4 @@ Wait TA for setting, your CI job will be triggered to run test after every push.
 
 ## Done
 
-If you have some problems that u really don't know why and how to solve it, email us: posd2017f@gmail.com or come to 1321 in office hours (Fri. 2pm to 4pm).
+If you have some problems that you really don't know why and how to solve it, email us: posd2017f@gmail.com or come to 1321 in office hours (Fri. 2pm to 4pm).
