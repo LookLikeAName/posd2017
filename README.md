@@ -17,7 +17,7 @@ This project is only used to create the environment, you should clean it when HW
   Bad:
   http://140.124.181.114:8080/buildByToken/build?job=<1055980XX>&token=<1055980XX>
   ```
-And about your own repository, if you want test your CI job is setup or not: init your repository and place this project's file, commit and push a simple change, and go to CI server to check the job result.
+And about your own repository, if you want to test your CI job is setup or not: init your repository and place this project's file, commit and push a simple change, and go to CI server to check the job result.
 
 ## 1. How to set up everything on your PC
 
