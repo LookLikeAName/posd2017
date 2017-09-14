@@ -10,7 +10,7 @@ This project is only used to create the environment, you should clean it when HW
  
  Modify makefile.
  Notice that Mac's googleTest installation guide, the command should be amended.
- ```
+ ```Shell
  Original:
  sudo cp -r gtest-1.7.0/include /usr/local/Cellar/gtest/
  
