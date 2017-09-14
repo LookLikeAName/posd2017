@@ -6,7 +6,7 @@ exp: mainExp.o Shapes.o Media.o
 ifeq (${OS}, Windows_NT)
 	g++ -o exp mainExp.o Shapes.o Media.o -lgtest
 else
-	g++ -o exp mainExp.o Shapes.o Media.o -lgtest -pthread
+	g++ -o exp mainExp.o Shapes.o Media.o -lgtest -lpthread
 endif
 	
 mainExp.o: mainExp.cpp exp.h
