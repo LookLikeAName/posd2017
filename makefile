@@ -4,9 +4,9 @@ all: exp
 
 exp: main.o Shapes.o Media.o
 ifeq (${OS}, Windows_NT)
-	g++ -o exp main.o Shapes.o Media.o -lgtest
+	g++ -o hw1 main.o Shapes.o Media.o -lgtest
 else
-	g++ -o exp main.o Shapes.o Media.o -lgtest -pthread
+	g++ -o hw1 main.o Shapes.o Media.o -lgtest -pthread
 endif
 	
 mainExp.o: main.cpp utSort.h
