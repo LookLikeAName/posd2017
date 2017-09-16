@@ -25,7 +25,15 @@ TEST (Sort, sortByIncreasingPerimeter) {
     Shapes.push_back (&cir3);
     Shapes.push_back (&cir2);
     Shapes.push_back (&cir0);
+
     sortFunctions.sortByIncreasingPerimeter(&Shapes);
+
+    std::list<Shape *>::iterator current;
+    std::list<Shape *>::iterator last=Shapes.begin();
+    for(current=Shapes.begin();current!=Shapes.end();current++){
+        EXPECT_TRUE((*current)->perimeter()>=(*last)->perimeter());    //By increasing the value of the current object should be bigger then the last one.
+        last=current;
+    }
 
 
 
@@ -39,11 +47,21 @@ TEST (Sort, sortByDecreasingPerimeter) {
     Circle cir3(0,0,4);
 
     std::list<Shape * > Shapes ;
+
     Shapes.push_back (&cir1);
     Shapes.push_back (&cir3);
     Shapes.push_back (&cir2);
     Shapes.push_back (&cir0);
+
     sortFunctions.sortByDecreasingPerimeter(&Shapes);
+
+    std::list<Shape *>::iterator current;
+    std::list<Shape *>::iterator last=Shapes.begin();
+    for(current=Shapes.begin();current!=Shapes.end();current++){
+        EXPECT_TRUE((*current)->perimeter()<=(*last)->perimeter());
+        last=current;
+    }
+
 
 }
 #endif // sortByPerimeterDebug
@@ -60,7 +78,16 @@ TEST (Sort, sortByIncreasingArea) {
     Shapes.push_back (&cir3);
     Shapes.push_back (&cir2);
     Shapes.push_back (&cir0);
+
     sortFunctions.sortByIncreasingArea(&Shapes);
+
+    std::list<Shape *>::iterator current;
+    std::list<Shape *>::iterator last=Shapes.begin();
+    for(current=Shapes.begin();current!=Shapes.end();current++){
+        EXPECT_TRUE((*current)->area()>=(*last)->area());
+        last=current;
+    }
+
 
 }
 
@@ -75,7 +102,15 @@ TEST (Sort, sortByDecreasingArea) {
     Shapes.push_back (&cir3);
     Shapes.push_back (&cir2);
     Shapes.push_back (&cir0);
+
     sortFunctions.sortByDecreasingArea(&Shapes);
+
+    std::list<Shape *>::iterator current;
+    std::list<Shape *>::iterator last=Shapes.begin();
+    for(current=Shapes.begin();current!=Shapes.end();current++){
+        EXPECT_TRUE((*current)->area()<=(*last)->area());
+        last=current;
+    }
 
 }
 #endif // sortByAreaDebug

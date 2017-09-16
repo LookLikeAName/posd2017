@@ -10,7 +10,7 @@ class Sort {
   public :
       static void sortByIncreasingPerimeter(std::list<Shape *> * shapeList)
       {
-        std::list<Shape *>::iterator itor=shapeList->begin();
+        std::list<Shape *>::iterator itor=shapeList->begin();                   //using bubble sort by comparing the value between two different iterator
 
         for(int i=0;i<shapeList->size();i++)
         {
