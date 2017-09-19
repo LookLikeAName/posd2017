@@ -115,7 +115,28 @@ class Sort {
 
       static void sortByIncreasingCompactness(std::list<Shape *> * shapeList)
       {
+        std::list<Shape *>::iterator itor=shapeList->begin();
 
+        for(int i=0;i<shapeList->size();i++)
+        {
+            std::list<Shape *>::iterator temp=shapeList->begin();
+            for(itor=shapeList->begin();itor!=shapeList->end();itor++)
+            {
+
+                if((*itor)->area()/(*itor)->perimeter()<(*temp)->area()/(*temp)->perimeter()){
+                    std::swap(*itor,*temp);
+                }
+                temp=itor;
+            }
+
+        }
+        #if sortDebug
+        for(itor=shapeList->begin();itor!=shapeList->end();itor++)
+            {
+                std::cout<<(*itor)->area()/(*itor)->perimeter()<<" ";
+            }
+               std::cout<<std::endl;
+        #endif // sortDebug
       };
 
 };
