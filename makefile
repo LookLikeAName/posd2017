@@ -8,7 +8,7 @@ else
 endif
 
 main.o: main.cpp utAtom.h atom.h utVariable.h variable.h
-	g++ --std=c++11 -c main.cpp
+	g++ --std=gnu++0x -c main.cpp
 
 utAtom: mainAtom.o
 ifeq (${OS}, Windows_NT)
@@ -17,7 +17,7 @@ else
 	g++ -o utAtom mainAtom.o -lgtest -pthread
 endif
 mainAtom.o: mainAtom.cpp utAtom.h atom.h
-	g++ --std=c++11 -c mainAtom.cpp
+	g++ --std=gnu++0x -c mainAtom.cpp
 
 utVariable: mainVariable.o
 ifeq (${OS}, Windows_NT)
@@ -26,7 +26,7 @@ else
 	g++ -o utVariable mainVariable.o -lgtest -pthread
 endif	
 mainVariable.o: mainVariable.cpp utVariable.h variable.h
-		g++ --std=c++11 -c mainVariable.cpp
+		g++ --std=gnu++0x -c mainVariable.cpp
 
 #exp: mainExp.o
 #	g++ -o exp mainExp.o -lgtest -lpthread
