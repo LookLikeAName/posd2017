@@ -1,4 +1,4 @@
-all: utAtom utVariable hw2
+all: hw2 
 
 hw2: main.o  
 ifeq (${OS}, Windows_NT)
@@ -7,26 +7,10 @@ else
 	g++ -o hw2 main.o -lgtest -pthread
 endif
 
-main.o: main.cpp utAtom.h atom.h utVariable.h variable.h
+main.o: main.cpp atom.h variable.h number.h utTerm.h
 	g++ --std=gnu++0x -c main.cpp
 
-utAtom: mainAtom.o
-ifeq (${OS}, Windows_NT)
-	g++ -o utAtom mainAtom.o -lgtest
-else
-	g++ -o utAtom mainAtom.o -lgtest -pthread
-endif
-mainAtom.o: mainAtom.cpp utAtom.h atom.h
-	g++ --std=gnu++0x -c mainAtom.cpp
 
-utVariable: mainVariable.o
-ifeq (${OS}, Windows_NT)
-	g++ -o utVariable mainVariable.o -lgtest
-else
-	g++ -o utVariable mainVariable.o -lgtest -pthread
-endif	
-mainVariable.o: mainVariable.cpp utVariable.h variable.h
-		g++ --std=gnu++0x -c mainVariable.cpp
 
 #exp: mainExp.o
 #	g++ -o exp mainExp.o -lgtest -lpthread

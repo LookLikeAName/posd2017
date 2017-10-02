@@ -1,21 +1,23 @@
-#ifndef ATOM_H
-#define ATOM_H
+#ifndef NUMBER_H
+#define NUMBER_H
 
 #include <string>
+#include "atom.h"
+#include "variable.h"
 using std::string;
 
-class Atom {
+class Number{
 public:
-  Atom (string s):_symbol(s), _value(s), _className("Atom"){}
-  string value(){ return _value; }
+  Number(string s ,string v) :_symbol(s), _value(v), _className("Number"){}
   string symbol(){return _symbol;}
+  string value(){ return _value; }
   bool setValue(string input){}
   string getClassName(){return _className;}
   template <class T>
- bool match(T atom){
+  bool match(T atom){
     if(atom.getClassName()=="Variable")
     {
-       return atom.setValue(_value); 
+       return atom.setValue(_value);
     }
     else
     {
@@ -24,11 +26,10 @@ public:
     }
 
   }
- private:
+private:
   string const _symbol;
   string _value;
   string const _className;
-
 };
 
 #endif

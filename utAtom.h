@@ -8,14 +8,14 @@ TEST(Atom, first) {
 
 TEST(Atom, tom) {
   Atom tom("tom");
-  ASSERT_EQ("tom", tom._symbol);
+  ASSERT_EQ("tom", tom.symbol());
 }
 
 TEST(Atom, match_tom_and_jerry) {
   Atom tom("tom");
   Atom jerry("jerry");
-  EXPECT_FALSE(tom == jerry);
-  EXPECT_TRUE(tom == tom);
+  EXPECT_FALSE(tom.match(jerry));
+  EXPECT_TRUE(tom.match(tom));
 }
 
 #endif

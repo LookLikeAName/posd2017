@@ -5,7 +5,7 @@
 
 TEST(Variable, constructor){
   Variable X("X");
-  ASSERT_EQ("X", X._symbol);
+  ASSERT_EQ("X", X.symbol());
 
 }
 
