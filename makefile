@@ -11,12 +11,20 @@ main.o: main.cpp utAtom.h atom.h utVariable.h variable.h
 	g++ -std=c++11 -c main.cpp
 
 utAtom: mainAtom.o
-	g++ -o utAtom mainAtom.o -lgtest -lpthread
+ifeq (${OS}, Windows_NT)
+	g++ -o utAtom mainAtom.o -lgtest
+else
+	g++ -o utAtom mainAtom.o -lgtest -pthread
+endif
 mainAtom.o: mainAtom.cpp utAtom.h atom.h
 	g++ -std=c++11 -c mainAtom.cpp
 
 utVariable: mainVariable.o
-		g++ -o utVariable mainVariable.o -lgtest -lpthread
+ifeq (${OS}, Windows_NT)
+	g++ -o utVariable mainVariable.o -lgtest
+else
+	g++ -o utVariable mainVariable.o -lgtest -pthread
+endif	
 mainVariable.o: mainVariable.cpp utVariable.h variable.h
 		g++ -std=c++11 -c mainVariable.cpp
 
