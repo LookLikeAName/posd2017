@@ -49,7 +49,7 @@ TEST (Number, matchSuccessToVar) {
   Number Number0(25);
   Variable X("X");
   ASSERT_TRUE(Number0.match(&X));
- EXPECT_EQ("25",X.value());
+  EXPECT_EQ("25",X.value());      //try if the match is success or not
 }
 #endif
 
