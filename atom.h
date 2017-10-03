@@ -9,18 +9,17 @@ public:
   Atom (string s):_symbol(s), _value(s), _className("Atom"){}
   string value(){ return _value; }
   string symbol(){return _symbol;}
-  bool setValue(string input){}
   string getClassName(){return _className;}
   template <class T>
- bool match(T atom){
-    if(atom.getClassName()=="Variable")
+ bool match(T *atom){
+    if(atom->getClassName()=="Variable")
     {
-       return atom.setValue(_value); 
+       return atom->match(this); 
     }
     else
     {
 
-      return _value == atom.value();
+      return _value == atom->value();
     }
 
   }
