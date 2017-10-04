@@ -51,6 +51,6 @@ mainVariable.o: mainVariable.cpp utVariable.h variable.h
 #list.o: list.h list.cpp term.h var.h
 #	g++ -std=c++11 -c list.cpp
 clean:
-	rm -f *.o  hw2 #utAtom utVariable
+	rm -f *.o utAtom utVariable hw2
 stat:
 	wc *.h *.cpp

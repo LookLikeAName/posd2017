@@ -2,8 +2,7 @@
 #define VARIABLE_H
 
 #include <string>
-#include "atom.h"
-#include "number.h"
+
 using std::string;
 
 class Variable{
@@ -13,13 +12,13 @@ public:
   string value(){ return _value; }
   string getClassName(){return _className;}
   template <class T>
-  bool match( T *atom ){
+  bool match( T &atom ){
     if(_assignable){
-      _value = atom->value() ;
+      _value = atom.value() ;
       _assignable = false;
       return true;
     }
-    return _value==atom->value();
+    return _value==atom.value();
   }
 private:
   string const _symbol;

@@ -3,8 +3,6 @@
 
 #include <string>
 #include <sstream>
-#include "atom.h"
-#include "variable.h"
 using std::string;
 using std::stringstream;
 class Number{
@@ -14,15 +12,14 @@ public:
   string value(){ return _value; }
   string getClassName(){return _className;}
   template <class T>
-  bool match(T *atom){
-    if(atom->getClassName()=="Variable")
+  bool match(T &atom){
+    if(atom.getClassName()=="Variable")
     {
-       return atom->match(this);
+       return atom.match(*this);
     }
     else
     {
-
-      return _value == atom->value();
+      return _value == atom.value();
     }
 
   }

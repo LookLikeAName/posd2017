@@ -11,15 +11,14 @@ public:
   string symbol(){return _symbol;}
   string getClassName(){return _className;}
   template <class T>
- bool match(T *atom){
-    if(atom->getClassName()=="Variable")
+ bool match(T &atom){
+    if(atom.getClassName()=="Variable")
     {
-       return atom->match(this); 
+       return atom.match(*this); 
     }
     else
     {
-
-      return _value == atom->value();
+      return _value == atom.value();
     }
 
   }
