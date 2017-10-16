@@ -2,23 +2,23 @@
 #define ATOM_H
 
 #include <string>
+#include "term.h"
 using std::string;
 
-class Atom {
+class Atom :public Term{
 public:
   Atom (string s):_symbol(s), _value(s), _className("Atom"){}
-  string value(){ return _value; }
-  string symbol(){return _symbol;}
-  string getClassName(){return _className;}
-  template <class T>
- bool match(T &atom){
-    if(atom.getClassName()=="Variable")
+  string value()const{ return _value; }
+  string symbol()const{return _symbol;}
+  string getClassName()const{return _className;}
+  bool match( Term &term ){ 
+    if(term.getClassName()=="Variable")
     {
-       return atom.match(*this); 
+       return term.match(*this); 
     }
     else
     {
-      return _value == atom.value();
+      return _value == term.value();
     }
 
   }
