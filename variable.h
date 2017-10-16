@@ -32,22 +32,28 @@ public:
         if(_symbol==term.symbol())
         {
           return true;
-        }       
+        }
+        if(_varMatched)
+        {
+         return  _matchedVar->match(term);
+        }
+        else
+        {
         _matchedVar=&term;
-
         #if debug
         std::cout<<_matchedVar->symbol()<<" "<<_matchedVar->value()<<" isVar\n";
         #endif
-        
+
         _assignable=term.isAssignable();
         _varMatched=true;
         return true;
+        }
       }
       else
       {
         if(_varMatched)
         {
-          _matchedVar->match(term);
+          return _matchedVar->match(term);
         }
         else
         {

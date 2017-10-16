@@ -89,9 +89,9 @@ TEST (Variable, num1_to_varZ_to_varY_to_varX) {
   Variable Y("Y");
   Variable Z("Z");
   Number Number(1);
-  Z.match(Number);
-  Y.match(Z);
   X.match(Y);
+  Y.match(Z);
+  Z.match(Number);
   EXPECT_EQ("1",X.value());
   EXPECT_EQ("1",Y.value());
   ASSERT_EQ("1",Z.value());
@@ -104,9 +104,9 @@ TEST (Variable, num1_to_varZ_to_varX_and_varY_to_varX) {
   Variable Y("Y");
   Variable Z("Z");
   Number Number(1);
-  Z.match(Number);
-  X.match(Z);
   X.match(Y);
+  X.match(Z);
+  Z.match(Number);
   EXPECT_EQ("1",X.value());
   EXPECT_EQ("1",Y.value());
   ASSERT_EQ("1",Z.value());
@@ -118,13 +118,13 @@ TEST (Variable, num1_to_varZ_to_varX_and_varY_to_varX) {
 // Then #symbol() of Y should return "Y"
 // And #value() of Y should return "s(X)"
 TEST (Variable, Struct1) {
-Variable X("X");
-Variable Y("Y");
-std::vector<Term *> v = {&X};
-Struct s(Atom("s"), v);
-Y.match(s);
-EXPECT_EQ("Y",Y.symbol());
-ASSERT_EQ("s(X)",Y.value());
+  Variable X("X");
+  Variable Y("Y");
+  std::vector<Term *> v = {&X};
+  Struct s(Atom("s"), v);
+  Y.match(s);
+  EXPECT_EQ("Y",Y.symbol());
+  ASSERT_EQ("s(X)",Y.value());
 }
 
 // Give there is a Struct s contains Variable X
