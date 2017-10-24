@@ -97,6 +97,21 @@ TEST (Variable, num1_to_varZ_to_varY_to_varX) {
   ASSERT_EQ("1",Z.value());
 }
 
+// ?- X=Y, Y=Z, Y=1
+// X=1, Y=1, Z=1
+TEST (Variable, varZ_to_varY_and_varY_to_varX_and_num1_to_Y) {
+  Variable X("X");
+  Variable Y("Y");
+  Variable Z("Z");
+  Number Number(1);
+  X.match(Y);
+  Y.match(Z);
+  Y.match(Number);
+  EXPECT_EQ("1",X.value());
+  EXPECT_EQ("1",Y.value());
+  ASSERT_EQ("1",Z.value());
+}
+
 // ?- X=Y, X=Z, Z=1
 // X=1, Y=1, Z=1
 TEST (Variable, num1_to_varZ_to_varX_and_varY_to_varX) {

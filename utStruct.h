@@ -104,6 +104,24 @@ TEST(Struct, var_match_atom)
     ASSERT_EQ("s(tom)",s.value());
 }
 
+TEST(Struct, var_match_atom_and_match_two_diff_var)
+{
+    Variable X("X");
+    std::vector<Term *> v = {&X};
+    Struct s(Atom("s"), v);
+    Atom tom("tom");
+    X.match(tom);
+    Variable Y("Y");
+    Variable Z("Z");
+    Y.match(s);
+    Z.match(s);
+    EXPECT_EQ("Y",Y.symbol());
+    EXPECT_EQ("s(tom)",Y.value());
+    EXPECT_EQ("Z",Z.symbol());
+    ASSERT_EQ("s(tom)",Z.value());
+}
+
+
 // Given there are Struct s1 and Struct s2
 // When Struct s1 contains Struct s2
 // And Struct s2 contains a Variable X

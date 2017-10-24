@@ -40,19 +40,26 @@ public:
   }
   string getClassName()const{return _className;}
   bool match(Term &term){
-    Struct * ps = dynamic_cast<Struct *>(&term);
-    if (ps){
-      if (!_name.match(ps->_name))
-        return false;
-      if(_args.size()!= ps->_args.size())
-        return false;
-      for(int i=0;i<_args.size();i++){
-        if(_args[i]->value() != ps->_args[i]->value())
-            return false;
-      }
-      return true;
+    if(term.getClassName()=="Variable")
+    {
+        return term.match(*this);
     }
-    return false;
+    else
+    {
+      Struct * ps = dynamic_cast<Struct *>(&term);
+      if (ps){
+        if (!_name.match(ps->_name))
+          return false;
+        if(_args.size()!= ps->_args.size())
+          return false;
+        for(int i=0;i<_args.size();i++){
+          if(_args[i]->value() != ps->_args[i]->value())
+              return false;
+        }
+        return true;
+      }
+      return false;
+    }
   }
 private:
   Atom _name;

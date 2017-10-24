@@ -28,7 +28,7 @@ public:
   bool isAssignable(){return _assignable;}
   bool match( Term &term ){   
     if(_assignable){
-      if(term.getClassName()=="Variable"||term.getClassName()=="Struct"){
+      if(term.getClassName()=="Variable"||term.getClassName()=="Struct"||term.getClassName()=="List"){
         if(_symbol==term.symbol())
         {
           return true;
@@ -43,7 +43,6 @@ public:
         #if debug
         std::cout<<_matchedVar->symbol()<<" "<<_matchedVar->value()<<" isVar\n";
         #endif
-
         _assignable=term.isAssignable();
         _varMatched=true;
         return true;

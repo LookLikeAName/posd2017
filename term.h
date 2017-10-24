@@ -20,7 +20,6 @@ public:
     return symbol() == term.symbol();
   }
   virtual bool isAssignable(){};
-
 };
 
 #endif
