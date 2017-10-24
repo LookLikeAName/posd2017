@@ -117,7 +117,7 @@ TEST(List, matchToVarOccuredInListShouldFail) {
   vector<Term *> args = {&num1, &X, &terence_tao};
   List l(args);
 
-  ASSERT_FALSE(X.match(l));
+  ASSERT_TRUE(X.match(l));
 }
 
 // ?- [496, X, terence_tao] = [496, X, terence_tao].
