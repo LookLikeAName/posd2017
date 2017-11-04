@@ -11,9 +11,13 @@ using std::string;
 class Struct:public Term
 {
 public:
-  Struct(Atom const & name, std::vector<Term *> args):_name(name), _args(args) ,_className("Struct"){
+  Struct(Atom const & name):_name(name), _args(), _className("Struct"){
   }
-
+  Struct(Atom const & name, std::vector<Term *> args):_name(name), _args(args), _haveArgs(true), _className("Struct"){
+  }
+  int arity(){
+    return _args.size();
+  }
   Term * args(int index) {
     return _args[index];
   }
@@ -23,19 +27,31 @@ public:
   }
     string value() const{
         string ret =_name.symbol() + "(";
+        if(_haveArgs){
         for(int i = 0; i < _args.size() - 1 ; i++){
           ret += _args[i]-> value() + ", ";
         }
         ret += _args[_args.size()-1]-> value() + ")";
+      }
+      else
+      {
+        ret+=")";
+      }
         return  ret;
     };
 
   string symbol() const{
     string ret =_name.symbol() + "(";
+    if(_haveArgs){
     for(int i = 0; i < _args.size() - 1 ; i++){
       ret += _args[i]-> symbol() + ", ";
     }
     ret += _args[_args.size()-1]-> symbol() + ")";
+    }
+    else
+    {
+      ret+=")";
+    }
     return  ret;
   }
   string getClassName()const{return _className;}
@@ -65,6 +81,7 @@ private:
   Atom _name;
   std::vector<Term *> _args;
   string const _className;
+  bool _haveArgs=false;
 };
 
 #endif

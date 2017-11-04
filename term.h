@@ -20,6 +20,8 @@ public:
     return symbol() == term.symbol();
   }
   virtual bool isAssignable(){};
+  virtual int arity(){};
+  virtual Term * args(int index){};
 };
 
 #endif
