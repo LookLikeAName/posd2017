@@ -1,12 +1,16 @@
 #ifndef UTPARSER_H
 #define UTPARSER_H
 
+#include <string>
+
 #include "parser.h"
 #include "scanner.h"
 #include "term.h"
 #include "list.h"
 #include "variable.h"
 #include "number.h"
+
+using std::exception;
 
 class ParserTest : public ::testing::Test {
 protected:
@@ -188,7 +192,14 @@ TEST_F(ParserTest, parseList) {
 TEST_F(ParserTest, illegal1) {
   Scanner scanner("[1,2)");
   Parser parser(scanner);
-  ASSERT_EQ("unexpected token", parser.createTerm()->symbol());
+  try{
+    parser.createTerm();
+  }
+  catch(exception& err)
+  {
+    ASSERT_EQ("unexpected token", err.what());
+  }
+  
 }
 
 // Given there is string: ".(1,[])" in scanner.
