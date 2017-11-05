@@ -229,7 +229,13 @@ TEST(List, headAndTailMatching4) {
 // Then it should throw a string: "Accessing head in an empty list" as an exception.
 TEST (List, emptyExecptionOfHead) {
   List l;
-  ASSERT_EQ("Accessing head in an empty list",l.head()->value());
+  try{
+    l.head();
+  }
+  catch(std::string& err)
+  {
+    ASSERT_EQ("Accessing head in an empty list",err);
+  }
 }
 
 // Given there is a empty list
@@ -237,7 +243,13 @@ TEST (List, emptyExecptionOfHead) {
 // Then it should throw a string: "Accessing tail in an empty list" as an exception.
 TEST (List, emptyExecptionOfTail) {
   List l;
-  ASSERT_EQ("Accessing tail in an empty list",l.tail()->value());
+  try{
+    l.tail();
+  }
+  catch(std::string& err)
+  {
+    ASSERT_EQ("Accessing tail in an empty list",err);
+  }
 }
 #endif
 

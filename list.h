@@ -29,9 +29,6 @@ public:
   string value()const{ 
   string ret ="[";
   if(_haveElement){
-    if(_elements[0]->value()=="tailException"){
-      return "Accessing tail in an empty list";
-  }
   for(int i = 0; i < _elements.size() - 1 ; i++){
     ret += _elements[i]-> value() + ", ";
   }
@@ -78,8 +75,7 @@ public:
     if(_haveElement){
         return _elements[0];
     }
-    Atom *temp=new Atom("Accessing head in an empty list");
-    return temp; 
+    throw string("Accessing head in an empty list"); 
   };
   List * tail() const
   {
@@ -98,10 +94,7 @@ public:
       }
       return l;
     }
-    Atom *temp=new Atom("tailException");
-    tails.push_back(temp);
-    l=new List(tails);
-    return l;
+    throw string("Accessing tail in an empty list");
   };
 private:
   vector<Term *> _elements;
