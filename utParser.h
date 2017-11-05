@@ -10,7 +10,6 @@
 #include "variable.h"
 #include "number.h"
 
-using std::exception;
 
 class ParserTest : public ::testing::Test {
 protected:
@@ -195,9 +194,9 @@ TEST_F(ParserTest, illegal1) {
   try{
     parser.createTerm();
   }
-  catch(exception& err)
+  catch(std::string& err)
   {
-    ASSERT_EQ("unexpected token", err.what());
+    ASSERT_EQ("unexpected token", err);
   }
   
 }

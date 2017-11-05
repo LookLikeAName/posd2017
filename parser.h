@@ -10,13 +10,6 @@ using std::string;
 #include "scanner.h"
 #include "struct.h"
 #include "list.h"
-class unexpectedToken:public std::exception
-{
-  virtual const char* what() const throw()
-  {
-    return "unexpected token";
-  }
-}unexpectedToken;
 
 class Parser{
 public:
@@ -42,7 +35,7 @@ public:
           }
           else if(_currentToken == ']')
           {
-           throw unexpectedToken;
+           throw string("unexpected token");
           }
         }
         else
@@ -63,7 +56,7 @@ public:
       }
       else if(_currentToken == ')')
       {
-        throw unexpectedToken;
+        throw string("unexpected token");
       }
     }
     return nullptr;
