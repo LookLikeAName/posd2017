@@ -48,7 +48,18 @@ TEST (Variable, varY_to_varX_and_num1_to_varX) {
   EXPECT_EQ("1",X.value());
   ASSERT_EQ("1",Y.value());
 }
-  
+//?- X=1 ,X=Y.
+//X=1 , Y=1
+TEST (Variable, varY_to_varX_and_num1_to_varX1) {
+  Variable X("X");
+  Variable Y("Y");
+  Number Number(1);
+  X.match(Number);
+  X.match(Y);
+  EXPECT_EQ("1",X.value());
+  ASSERT_EQ("1",Y.value());
+}
+
 // ?- X=Y, Y=1.
 // X=1
 TEST (Variable, varY_to_varX_and_num1_to_varY) {

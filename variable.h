@@ -73,6 +73,13 @@ public:
     }
     else
     {
+      #if debug
+          std::cout<<"0\n";
+      #endif
+      if(term.getClassName()=="Variable")
+      {
+        return term.match(*this);
+      }
      return _value==term.value();
     }
   }

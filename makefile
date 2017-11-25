@@ -1,13 +1,13 @@
-all: hw5 #utAtom #utVariable  
+all: hw6 #utAtom #utVariable  
 
-hw5: main.o  
+hw6: main.o  
 ifeq (${OS}, Windows_NT)
-	g++ -o hw5 main.o -lgtest
+	g++ -o hw6 main.o -lgtest
 else
-	g++ -o hw5 main.o -lgtest -pthread
+	g++ -o hw6 main.o -lgtest -pthread
 endif
 
-main.o: main.cpp atom.h variable.h number.h term.h struct.h utVariable.h utStruct.h utList.h list.h global.h scanner.h parser.h utParser.h
+main.o: main.cpp atom.h variable.h number.h term.h struct.h utVariable.h utStruct.h utList.h list.h global.h scanner.h parser.h utParser.h node.h
 	g++ --std=gnu++0x -c main.cpp
 
 utAtom: mainAtom.o
@@ -51,6 +51,6 @@ mainVariable.o: mainVariable.cpp utVariable.h variable.h
 #list.o: list.h list.cpp term.h var.h
 #	g++ -std=c++11 -c list.cpp
 clean:
-	rm -f *.o hw5 #utAtom #utVariable 
+	rm -f *.o hw6 #utAtom #utVariable 
 stat:
 	wc *.h *.cpp
