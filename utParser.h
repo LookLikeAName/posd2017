@@ -262,10 +262,10 @@ TEST_F(ParserTest, ThreeTermsMatching) {
   Node * et = parser.expressionTree();
   EXPECT_TRUE(et->evaluate());
   EXPECT_EQ(COMMA, et->payload);
-  EXPECT_EQ(EQUALITY, et->left->payload);
-  EXPECT_EQ(COMMA, et->right->payload);
-  EXPECT_EQ(EQUALITY, et->right->left->payload);
-  EXPECT_EQ(EQUALITY, et->right->right->payload);
+  EXPECT_EQ(COMMA, et->left->payload);
+  EXPECT_EQ(EQUALITY, et->right->payload);
+  EXPECT_EQ(TERM, et->right->left->payload);
+  EXPECT_EQ(TERM, et->right->right->payload);
 
   EXPECT_EQ("1", terms[0]->value());
   EXPECT_EQ("2", terms[2]->value());
