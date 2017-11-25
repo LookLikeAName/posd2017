@@ -124,7 +124,7 @@ public:
           
       }
     }
-   /* for(int i=0;i<_varList.size();i++){
+  /* for(int i=0;i<_varList.size();i++){
             std::cout<<_varList[i]->symbol()<<" ";
            }
     std::cout<<"\n";
@@ -134,7 +134,7 @@ public:
     std::cout<<"\n";
     */
     inToPostfix();
-   /* 
+   /*
    for(int i=0;i<_nodeList.size();i++){
       std::cout<<_nodeList[i]->payload<<":";
       if(_nodeList[i]->payload==TERM)
@@ -178,6 +178,7 @@ private:
 
   void inToPostfix(){
     vector <Node *>postFix;
+    vector <Node *>temp0,temp1;
     vector <Node *> nodeStack={nullptr};
     int top;
     for(int i=0;i<_nodeList.size();i++){
@@ -212,7 +213,18 @@ private:
             break;
       }
     }
-    _nodeList=postFix;
+    for(int i=0;i<postFix.size();i++){
+      if(postFix[i]->payload==COMMA||postFix[i]->payload==SEMICOLON)
+      {
+          temp0.push_back(postFix[i]);
+      }
+      else
+      {
+          temp1.push_back(postFix[i]);
+      }
+    }
+    temp1.insert(temp1.end(),temp0.begin(),temp0.end());
+    _nodeList=temp1;
   }
   void creatTree(){
    
