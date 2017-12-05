@@ -6,12 +6,26 @@
 #include <vector>
 using std::vector;
 
+class Iterator;
 class List : public Term {
 public:
   List (): _elements(),_className("List"){}
   List (vector<Term *> elements):_elements(elements),_haveElement(true),_className("List"){
   }
-  
+
+  Iterator * createIterator();
+  Iterator * createBFSIterator();
+  Iterator * createDFSIterator();
+
+  int arity(){
+    return _elements.size();
+  }
+
+  Term * args(int index) {
+    return _elements[index];
+  }
+
+
   string symbol()const{
     string ret ="[";
     if(_haveElement){

@@ -1,14 +1,17 @@
-all: hw6 #utAtom #utVariable  
+all: hw7 #utAtom #utVariable  
 
-hw6: main.o  
+hw7: main.o iteratorManage.o
 ifeq (${OS}, Windows_NT)
-	g++ -o hw6 main.o -lgtest
+	g++ -o hw7 main.o iteratorManage.o -lgtest
 else
-	g++ -o hw6 main.o -lgtest -pthread
+	g++ -o hw7 main.o iteratorManage.o -lgtest -pthread
 endif
 
-main.o: main.cpp atom.h variable.h number.h term.h struct.h utVariable.h utStruct.h utList.h list.h global.h scanner.h parser.h utParser.h node.h
+main.o: main.cpp atom.h variable.h number.h term.h struct.h utVariable.h utStruct.h utList.h list.h global.h scanner.h parser.h utParser.h node.h utIterator.h iterator.h
 	g++ --std=gnu++0x -c main.cpp
+
+iteratorManage.o: iteratorManage.cpp term.h struct.h list.h iterator.h
+	g++ --std=gnu++0x -c iteratorManage.cpp
 
 utAtom: mainAtom.o
 ifeq (${OS}, Windows_NT)
@@ -51,6 +54,6 @@ mainVariable.o: mainVariable.cpp utVariable.h variable.h
 #list.o: list.h list.cpp term.h var.h
 #	g++ -std=c++11 -c list.cpp
 clean:
-	rm -f *.o hw6 #utAtom #utVariable 
+	rm -f *.o hw7 #utAtom #utVariable 
 stat:
 	wc *.h *.cpp
