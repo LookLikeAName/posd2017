@@ -8,9 +8,7 @@ Iterator * Term::createIterator(){
     return new NullIterator(this);
 }
 
-/*Iterator * Struct::createIterator(){
-    return new StructIterator(this);
-}*/
+
 Iterator * Struct::createIterator(){
     return new StructListIterator(this);
 }
@@ -21,9 +19,7 @@ Iterator * Struct::createDFSIterator(){
     return new DFSIterator(this);
 }
 
-/*Iterator * List::createIterator(){
-   return new ListIterator(this);
-}*/
+
 Iterator * List::createIterator(){
    return new StructListIterator(this);
 }
