@@ -6,6 +6,7 @@
 #include <vector>
 using std::vector;
 
+template <class T>
 class Iterator;
 class List : public Term {
 public:
@@ -13,9 +14,9 @@ public:
   List (vector<Term *> elements):_elements(elements),_haveElement(true),_className("List"){
   }
 
-  Iterator * createIterator();
-  Iterator * createBFSIterator();
-  Iterator * createDFSIterator();
+  Iterator<Term *> * createIterator();
+  Iterator<Term *> * createBFSIterator();
+  Iterator<Term *> * createDFSIterator();
 
   int arity(){
     return _elements.size();

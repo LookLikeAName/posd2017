@@ -17,7 +17,7 @@ TEST(iterator, first) {
     Struct t(Atom("t"), { &X, &two });
     Struct s(Atom("s"), { &one, &t, &Y });
     // StructIterator it(&s);
-    Iterator *itStruct = s.createIterator();
+    Iterator<Term*> *itStruct = s.createIterator();
     // Iterator& itStruct = it;
     // ASSERT_EQ(it.first()->symbol());
     itStruct->first();
@@ -63,7 +63,7 @@ TEST(iterator, firstList) {
     Struct t(Atom("t"), { &X, &two });
     List l({ &one, &t, &Y });
     ListIterator it(&l);
-    Iterator* itList = &it;
+    Iterator<Term*> * itList = &it;
     itList->first();
     ASSERT_EQ("1", itList->currentItem()->symbol());
     ASSERT_FALSE(itList->isDone());
@@ -81,14 +81,14 @@ TEST(iterator, NullIterator){
   NullIterator nullIterator(&one);
   nullIterator.first();
   ASSERT_TRUE(nullIterator.isDone());
-  Iterator * it = one.createIterator();
+  Iterator<Term*> * it = one.createIterator();
   it->first();
   ASSERT_TRUE(it->isDone());
 }
 
-/*s(1,t(X, 2),Y)
- except: 1 -> t -> Y -> X -> 2
-*/
+//s(1,t(X, 2),Y)
+//expect: 1 -> t -> Y -> X -> 2
+
 TEST(iterator, structBFSIterator){
   Number one(1);
   Number two(2);
@@ -97,7 +97,7 @@ TEST(iterator, structBFSIterator){
   Struct t(Atom("t"), { &X, &two });
   Struct s(Atom("s"), { &one, &t, &Y });
 
-  Iterator * it = s.createBFSIterator();
+  Iterator<Term*> * it = s.createBFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -111,9 +111,9 @@ TEST(iterator, structBFSIterator){
   ASSERT_TRUE(it->isDone());
 }
 
-/*s( 1, t(v(X), 2), Y)
- except: 1 -> t -> Y -> v -> 2 ->X
-*/
+//s( 1, t(v(X), 2), Y)
+//expect: 1 -> t -> Y -> v -> 2 ->X
+
 TEST(iterator, nestedStructBFSIterator){
   Number one(1);
   Number two(2);
@@ -123,7 +123,7 @@ TEST(iterator, nestedStructBFSIterator){
   Struct t(Atom("t"), { &v, &two });
   Struct s(Atom("s"), { &one, &t, &Y });
 
-  Iterator * it = s.createBFSIterator();
+  Iterator<Term*> * it = s.createBFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -139,9 +139,9 @@ TEST(iterator, nestedStructBFSIterator){
   ASSERT_TRUE(it->isDone());
 }
 
-/*s(1,t(X, 2),Y)
- except: 1 -> t -> X -> 2 -> Y
-*/
+//s(1,t(X, 2),Y)
+//expect: 1 -> t -> X -> 2 -> Y
+
 TEST(iterator, structDFSIterator){
   Number one(1);
   Number two(2);
@@ -150,7 +150,7 @@ TEST(iterator, structDFSIterator){
   Struct t(Atom("t"), { &X, &two });
   Struct s(Atom("s"), { &one, &t, &Y });
 
-  Iterator * it = s.createDFSIterator();
+  Iterator<Term*> * it = s.createDFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -164,9 +164,9 @@ TEST(iterator, structDFSIterator){
   ASSERT_TRUE(it->isDone());
 }
 
-/*s( 1, t(v(X), 2), Y)
- except: 1 -> t -> v -> X -> 2 ->Y
-*/
+//s( 1, t(v(X), 2), Y)
+ //expect: 1 -> t -> v -> X -> 2 ->Y
+
 TEST(iterator, nestedStructDFSIterator){
   Number one(1);
   Number two(2);
@@ -176,7 +176,7 @@ TEST(iterator, nestedStructDFSIterator){
   Struct t(Atom("t"), { &v, &two });
   Struct s(Atom("s"), { &one, &t, &Y });
 
-  Iterator * it = s.createDFSIterator();
+  Iterator<Term*> * it = s.createDFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -192,9 +192,8 @@ TEST(iterator, nestedStructDFSIterator){
   ASSERT_TRUE(it->isDone());
 }
 
-/*[1,t(X, 2),Y]
- except: 1 -> t -> Y -> X -> 2
-*/
+//[1,t(X, 2),Y]
+ //expect: 1 -> t -> Y -> X -> 2
 TEST(iterator, listBFSIterator){
   Number one(1);
   Number two(2);
@@ -203,7 +202,7 @@ TEST(iterator, listBFSIterator){
   Struct t(Atom("t"), { &X, &two });
   List l({ &one, &t, &Y });
 
-  Iterator * it = l.createBFSIterator();
+  Iterator<Term*> * it = l.createBFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -216,9 +215,9 @@ TEST(iterator, listBFSIterator){
   EXPECT_EQ("2",it->currentItem()->symbol());
   ASSERT_TRUE(it->isDone());
 }
-/*[1,t(X),[Y,2]]
- except: 1 -> t -> [] -> X -> Y -> 2
-*/
+//[1,t(X),[Y,2]]
+ //expect: 1 -> t -> [] -> X -> Y -> 2
+
 TEST(iterator, nestedListBFSIterator){
   Number one(1);
   Number two(2);
@@ -228,7 +227,7 @@ TEST(iterator, nestedListBFSIterator){
   List l0({&Y,&two});
   List l({ &one, &t, &l0 });
 
-  Iterator * it = l.createBFSIterator();
+  Iterator<Term*> * it = l.createBFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -243,9 +242,9 @@ TEST(iterator, nestedListBFSIterator){
   EXPECT_EQ("2",it->currentItem()->symbol());
   ASSERT_TRUE(it->isDone());
 }
-/*[1,t(X, 2),Y]
- except: 1 -> t -> Y -> X -> 2
-*/
+//[1,t(X, 2),Y]
+ //expect: 1 -> t -> Y -> X -> 2
+
 TEST(iterator, listDFSIterator){
   Number one(1);
   Number two(2);
@@ -254,7 +253,7 @@ TEST(iterator, listDFSIterator){
   Struct t(Atom("t"), { &X, &two });
   List l({ &one, &t, &Y });
 
-  Iterator * it = l.createDFSIterator();
+  Iterator<Term*> * it = l.createDFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -268,9 +267,9 @@ TEST(iterator, listDFSIterator){
   ASSERT_TRUE(it->isDone());
 }
 
-/*[1,t(X),[Y,2]]
- except: 1 -> t -> X -> []-> Y -> 2
-*/
+//[1,t(X),[Y,2]]
+ //expect: 1 -> t -> X -> []-> Y -> 2
+
 TEST(iterator, nestedListDFSIterator){
   Number one(1);
   Number two(2);
@@ -280,7 +279,7 @@ TEST(iterator, nestedListDFSIterator){
   List l0({&Y,&two});
   List l({ &one, &t, &l0 });
 
-  Iterator * it = l.createDFSIterator();
+  Iterator<Term*> * it = l.createDFSIterator();
   it->first();
   EXPECT_EQ("1",it->currentItem()->symbol());
   it->next();
@@ -295,4 +294,5 @@ TEST(iterator, nestedListDFSIterator){
   EXPECT_EQ("2",it->currentItem()->symbol());
   ASSERT_TRUE(it->isDone());
 }
+
 #endif

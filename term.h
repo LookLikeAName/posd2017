@@ -4,6 +4,7 @@
 
 using std::string;
 
+template <class T>
 class Iterator;
 class Term{
 public:
@@ -11,7 +12,11 @@ public:
   virtual string getClassName() const= 0;
 
   virtual string value() const=0;
-  virtual Iterator * createIterator();
+
+ virtual Iterator<Term *> * createIterator();
+ virtual Iterator<Term *> * createBFSIterator();
+ virtual Iterator<Term *> * createDFSIterator();
+
   virtual bool match(Term & term) {
     return symbol() == term.symbol();
   }

@@ -5,17 +5,19 @@
 #include "list.h"
 #include "term.h"
 
-class Iterator {
+template<class T>
+class Iterator{
 public:
   virtual void first() = 0;
   virtual void next() = 0;
-  virtual Term* currentItem() const = 0;
+  virtual T currentItem() const = 0;
   virtual bool isDone() const = 0;
 };
 
-class NullIterator :public Iterator{
+
+class NullIterator :public Iterator<Term *>{
 public:
-  NullIterator(Term *n){}
+  NullIterator(Term *){}
   void first(){}
   void next(){}
   Term * currentItem() const{
@@ -24,10 +26,10 @@ public:
   bool isDone() const{
     return true;
   }
-
 };
 
-class StructIterator :public Iterator {
+
+class StructIterator :public Iterator<Term *> {
 public:
   StructIterator(Struct *s): _index(0), _s(s) {}
   void first() {
@@ -51,7 +53,8 @@ private:
   Struct* _s;
 };
 
-class ListIterator :public Iterator {
+
+class ListIterator :public Iterator<Term *> {
 public:
   ListIterator(List *list): _index(0), _list(list) {}
 
@@ -76,10 +79,10 @@ private:
 };
 
 
-class StructListIterator :public Iterator {
+class StructListIterator :public Iterator<Term *> {
 public:
-  template <class T>
-  StructListIterator(T *input): _index(0), _input(input) {}
+ 
+  StructListIterator(Term *input): _index(0), _input(input) {}
 
   void first() {
     _index = 0;
@@ -101,7 +104,8 @@ private:
   Term* _input;
 };
 
-class BFSIterator :public Iterator {
+
+class BFSIterator :public Iterator<Term *>{
 public:
   BFSIterator(Term *input): _index(0), _input(input) {
     Iterator *it = input->createIterator();
@@ -140,7 +144,7 @@ private:
 };
 
 
-class DFSIterator :public Iterator {
+class DFSIterator :public Iterator<Term *> {
 public:
   DFSIterator(Term *input): _index(0), _input(input) {
     Iterator *it = input->createIterator();
