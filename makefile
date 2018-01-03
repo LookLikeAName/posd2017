@@ -1,59 +1,100 @@
-all: hw7 #utAtom #utVariable  
-
-hw7: main.o iteratorManage.o
-ifeq (${OS}, Windows_NT)
-	g++ -o hw7 main.o iteratorManage.o -lgtest
+hw8: term.o struct.o list.o utShell.h parser.h scanner.h exp.h atom.h number.h variable.h
+ifeq (${OS}, Windows_NT) 
+	g++ -c -std=gnu++0x hw.cpp 
+	g++ -o hw8 hw.o term.o struct.o list.o -lgtest 
 else
-	g++ -o hw7 main.o iteratorManage.o -lgtest -pthread
+	make utShell.o
+	g++ -o hw8 utShell.o term.o struct.o list.o -lgtest -lpthread
+	./hw8
+	make clean
 endif
 
-main.o: main.cpp atom.h variable.h number.h term.h struct.h utVariable.h utStruct.h utList.h list.h global.h scanner.h parser.h utParser.h node.h utIterator.h iterator.h
-	g++ --std=gnu++0x -c main.cpp
-
-iteratorManage.o: iteratorManage.cpp term.h struct.h list.h iterator.h
-	g++ --std=gnu++0x -c iteratorManage.cpp
-
-utAtom: mainAtom.o
-ifeq (${OS}, Windows_NT)
-	g++ -o utAtom mainAtom.o -lgtest
+shell: term.o struct.o list.o shell.cpp parser.h scanner.h exp.h atom.h number.h variable.h
+ifeq (${OS}, Windows_NT) 
+	g++ -c -std=gnu++0x shell.cpp
+	g++ -o shell shell.o term.o struct.o list.o -lgtest
 else
-	g++ -o utAtom mainAtom.o -lgtest -pthread
+	g++ -c -std=gnu++0x shell.cpp
+	g++ -o shell shell.o term.o struct.o list.o -lgtest -lpthread
 endif
-mainAtom.o: mainAtom.cpp utAtom.h atom.h
-	g++ --std=gnu++0x -c mainAtom.cpp
 
-utVariable: mainVariable.o
+#######UnitTest#######
+allTestRunAndClean: utAtom utTerm utVariable utStruct utList utScanner utParser utIterator utExp utShell
+	./utAtom && ./utTerm && ./utVariable && ./utStruct && ./utList && ./utScanner && ./utParser && ./utIterator && ./utExp && ./utShell
+	make clean
+
+utAtom: utAtom.o term.o
+	g++ -o $@ $^ -lgtest -lpthread
+utAtom.o: utAtom.h atom.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utTerm: utTerm.o term.o
+	g++ -o $@ $^ -lgtest -lpthread
+utTerm.o: utTerm.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utVariable: utVariable.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utVariable.o: utVariable.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utStruct: utStruct.o term.o struct.o
+	g++ -o $@ $^ -lgtest -lpthread
+utStruct.o: utStruct.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utList: utList.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utList.o: utList.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utScanner: utScanner.o
+	g++ -o $@ $^ -lgtest -lpthread
+utScanner.o: utScanner.h scanner.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utParser: utParser.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utParser.o: utParser.h parser.h scanner.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utIterator: utIterator.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utIterator.o: utIterator.h iterator.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utExp: utExp.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utExp.o: utExp.h parser.h scanner.h exp.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+utShell: utShell.o term.o struct.o list.o
+	g++ -o $@ $^ -lgtest -lpthread
+utShell.o: utShell.h parser.h scanner.h exp.h atom.h number.h variable.h
+	touch $*.cpp && echo "#include \"$*.h\"" > $*.cpp && cat utTemplate.h >> $*.cpp
+	g++ -c -std=gnu++0x $*.cpp
+
+
+#####Object file#####
+term.o: term.h
+	g++ -c -std=gnu++0x $*.cpp
+struct.o: struct.h
+	g++ -c -std=gnu++0x $*.cpp
+list.o: list.h
+	g++ -c -std=gnu++0x $*.cpp
+
+clean:	
 ifeq (${OS}, Windows_NT)
-	g++ -o utVariable mainVariable.o -lgtest
+	del *.o *.exe
 else
-	g++ -o utVariable mainVariable.o -lgtest -pthread
-endif	
-mainVariable.o: mainVariable.cpp utVariable.h variable.h
-		g++ --std=gnu++0x -c mainVariable.cpp
-
-#exp: mainExp.o
-#	g++ -o exp mainExp.o -lgtest -lpthread
-#mainExp.o: mainExp.cpp exp.h global.h
-#	g++ -std=c++11 -c mainExp.cpp
-
-#utScannerParser: mainScannerParser.o term.o struct.o var.o list.o
-#	g++ -o utScannerParser mainScannerParser.o term.o var.o struct.o list.o -lgtest -lpthread
-#mainScannerParser.o: mainScannerParser.cpp utScanner.h utParser.h scanner.h parser.h term.h var.h struct.h list.h global.h node.h
-#		g++ -std=c++11 -c mainScannerParser.cpp
-
-#utTerm: mainTerm.o term.o struct.o var.o list.o
-#	g++ -o utTerm mainTerm.o term.o var.o struct.o list.o -lgtest -lpthread
-#mainTerm.o: mainTerm.cpp utTerm.h term.h var.h utStruct.h struct.h list.h utList.h
-#	g++ -std=c++11 -c mainTerm.cpp
-#term.o: term.h term.cpp
-#	g++ -std=c++11 -c term.cpp
-#struct.o: struct.h struct.cpp
-#	g++ -std=c++11 -c struct.cpp
-#var.o: var.h var.cpp
-#g++ -std=c++11 -c var.cpp
-#list.o: list.h list.cpp term.h var.h
-#	g++ -std=c++11 -c list.cpp
-clean:
-	rm -f *.o hw7 #utAtom #utVariable 
-stat:
-	wc *.h *.cpp
+	rm -f shell *.o ut*[!.h] hw*[!.cpp]
+endif

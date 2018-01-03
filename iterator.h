@@ -1,188 +1,182 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-#include "struct.h"
+#include <queue>
+#include <stack>
 #include "list.h"
+#include "struct.h"
 #include "term.h"
+using std::queue;
+using std::stack;
 
-template<class T>
-class Iterator{
+template <class T>
+class Iterator
+{
 public:
   virtual void first() = 0;
   virtual void next() = 0;
-  virtual T currentItem() const = 0;
+  virtual Term *currentItem() const = 0;
   virtual bool isDone() const = 0;
+  virtual Term *currentTerm() const = 0;
 };
 
-
-class NullIterator :public Iterator<Term *>{
+template <class T>
+class NullIterator : public Iterator<T>
+{
 public:
-  NullIterator(Term *){}
-  void first(){}
-  void next(){}
-  Term * currentItem() const{
-      return nullptr;
-  }
-  bool isDone() const{
-    return true;
-  }
-};
+  friend class Term;
 
+  void first(){};
+  void next(){};
+  Term *currentItem() const { return nullptr; };
+  bool isDone() const { return true; };
+  Term *currentTerm() const { return _t; };
 
-class StructIterator :public Iterator<Term *> {
-public:
-  StructIterator(Struct *s): _index(0), _s(s) {}
-  void first() {
-    _index = 0;
-  }
-
-  Term* currentItem() const {
-    return _s->args(_index);
-  }
-
-  bool isDone() const {
-    return _index >= _s->arity();
-  }
-
-  void next() {
-    _index++;
-  }
 private:
-  
+  NullIterator(T t) : _t(t) {}
+  T _t;
+};
+
+template <class T>
+class StructIterator : public Iterator<T>
+{
+public:
+  friend class Struct;
+
+  void first() { _index = 0; }
+  void next() { _index++; }
+  Term *currentItem() const { return _s->args(_index); }
+  bool isDone() const { return _index >= _s->arity(); }
+  Term *currentTerm() const { return _s; };
+
+private:
+  StructIterator(Struct *s) : _index(0), _s(s) {}
   int _index;
-  Struct* _s;
+  Struct *_s;
 };
 
-
-class ListIterator :public Iterator<Term *> {
+template <class T>
+class ListIterator : public Iterator<T>
+{
 public:
-  ListIterator(List *list): _index(0), _list(list) {}
+  friend class List;
 
-  void first() {
-    _index = 0;
-  }
-
-  Term* currentItem() const {
-    return _list->args(_index);
-  }
-
-  bool isDone() const {
-    return _index >= _list->arity();
-  }
-
-  void next() {
-    _index++;
-  }
-private:
-  int _index;
-  List* _list;
-};
-
-
-class StructListIterator :public Iterator<Term *> {
-public:
- 
-  StructListIterator(Term *input): _index(0), _input(input) {}
-
-  void first() {
-    _index = 0;
-  }
-
-  Term* currentItem() const {
-    return _input->args(_index);
-  }
-
-  bool isDone() const {
-    return _index >= _input->arity();
-  }
-
-  void next() {
-    _index++;
-  }
-private:
-  int _index; 
-  Term* _input;
-};
-
-
-class BFSIterator :public Iterator<Term *>{
-public:
-  BFSIterator(Term *input): _index(0), _input(input) {
-    Iterator *it = input->createIterator();
-    for(it->first();!it->isDone();it->next()){
-      _content.push_back(it->currentItem());
+  void first() { _tailList = *_l; }
+  void next()
+  {
+    try
+    {
+      _tailList = *(_tailList.tail());
     }
-    delete it;
-    for(int i=0;i<_content.size();i++){
-      Iterator *it =_content[i]->createIterator();
-      for(it->first();!it->isDone();it->next()){
-        _content.push_back(it->currentItem());
-       }
-      delete it;
+    catch (string e)
+    {
     }
   }
-
-  void first() {
-    _index = 0;
+  Term *currentItem() const { return _tailList.head(); }
+  bool isDone() const
+  {
+    try
+    {
+      _tailList.head();
+    }
+    catch (string e)
+    {
+      return true;
+    }
+    return false;
   }
+  Term *currentTerm() const { return _l; };
 
-  Term* currentItem() const {
-    return _content[_index];
-  }
-
-  bool isDone() const {
-    return _index >= _content.size()-1;
-  }
-
-  void next() {
-    _index++;
-  }
 private:
-  int _index;
-  vector <Term *> _content;
-  Term* _input;
+  ListIterator(List *l) : _l(l), _tailList(*l) {}
+  List *_l, _tailList;
 };
 
-
-class DFSIterator :public Iterator<Term *> {
+template <class T>
+class DFSIterator : public Iterator<T>
+{
 public:
-  DFSIterator(Term *input): _index(0), _input(input) {
-    Iterator *it = input->createIterator();
-    for(it->first();!it->isDone();it->next()){
-      _content.push_back(it->currentItem());
+  friend class Struct;
+  friend class List;
+
+  void first()
+  {
+    while (!_iteratorStack.empty())
+      _iteratorStack.pop();
+    _iteratorStack.push(_t->createIterator());
+  }
+  void next()
+  {
+    if (!isDone())
+    {
+      if (isLeaf())
+      {
+        _iteratorStack.top()->next();
+        while (!isDone() && _iteratorStack.top()->isDone())
+        {
+          _iteratorStack.pop();
+          if (!isDone())
+            _iteratorStack.top()->next();
+        }
+      }
+      else
+        _iteratorStack.push(currentItem()->createIterator());
     }
-    delete it;
-    for(int i=0;i<_content.size();i++){
-      Iterator *it =_content[i]->createIterator();
-      vector <Term*> temp;
-      for(it->first();!it->isDone();it->next()){
-        temp.push_back(it->currentItem());
-       }
-      delete it;
-      for(int j=0;j<temp.size();j++){
-        _content.insert(_content.begin()+i+j+1,temp[j]);
+  }
+  Term *currentItem() const { return _iteratorStack.top()->currentItem(); }
+  bool isDone() const { return _iteratorStack.empty(); };
+  Term *currentTerm() const { return _t; };
+
+private:
+  DFSIterator(T t) : _t(t) { _iteratorStack.push(_t->createIterator()); }
+  bool isLeaf() const { return currentItem()->createIterator()->isDone(); }
+
+  stack<Iterator<Term *> *> _iteratorStack;
+  T _t;
+};
+
+template <class T>
+class BFSIterator : public Iterator<T>
+{
+public:
+  friend class Struct;
+  friend class List;
+
+  void first()
+  {
+    while (!_iteratorQueue.empty())
+      _iteratorQueue.pop();
+    _iteratorQueue.push(_t->createIterator());
+  }
+  void next()
+  {
+    if (!isDone())
+    {
+      if (isLeaf())
+      {
+        _iteratorQueue.front()->next();
+        if (_iteratorQueue.front()->isDone())
+          _iteratorQueue.pop();
+      }
+      else
+      {
+        _iteratorQueue.push(currentItem()->createIterator());
+        _iteratorQueue.front()->next();
+        if (_iteratorQueue.front()->isDone())
+          _iteratorQueue.pop();
       }
     }
   }
+  Term *currentItem() const { return _iteratorQueue.front()->currentItem(); }
+  bool isDone() const { return _iteratorQueue.empty(); };
+  Term *currentTerm() const { return _t; };
 
-  void first() {
-    _index = 0;
-  }
-
-  Term* currentItem() const {
-    return _content[_index];
-  }
-
-  bool isDone() const {
-    return _index >= _content.size()-1;
-  }
-
-  void next() {
-    _index++;
-  }
 private:
-  int _index;
-  vector <Term *> _content;
-  Term* _input;
+  BFSIterator(T t) : _t(t) { _iteratorQueue.push(_t->createIterator()); }
+  bool isLeaf() const { return currentItem()->createIterator()->isDone(); }
+
+  queue<Iterator<Term *> *> _iteratorQueue;
+  T _t;
 };
+
 #endif

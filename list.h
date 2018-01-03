@@ -1,120 +1,107 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "term.h"
-#include "atom.h"
+#include <string>
 #include <vector>
+#include "term.h"
+#include "variable.h"
+using std::string;
 using std::vector;
 
 template <class T>
 class Iterator;
-class List : public Term {
+template <class T>
+class DFSIterator;
+template <class T>
+class BFSIterator;
+
+class List : public Term
+{
 public:
-  List (): _elements(),_className("List"){}
-  List (vector<Term *> elements):_elements(elements),_haveElement(true),_className("List"){
-  }
-
-  Iterator<Term *> * createIterator();
-  Iterator<Term *> * createBFSIterator();
-  Iterator<Term *> * createDFSIterator();
-
-  int arity(){
-    return _elements.size();
-  }
-
-  Term * args(int index) {
-    return _elements[index];
-  }
-
-
-  string symbol()const{
-    string ret ="[";
-    if(_haveElement){
-    for(int i = 0; i < _elements.size() - 1 ; i++){
-      ret += _elements[i]-> symbol() + ", ";
-    }
-    ret += _elements[_elements.size()-1]-> symbol() + "]";
-    }
-    else
-    {
-      ret+="]";
-    }
-    return  ret;
-  }
-  string value()const{ 
-  string ret ="[";
-  if(_haveElement){
-  for(int i = 0; i < _elements.size() - 1 ; i++){
-    ret += _elements[i]-> value() + ", ";
-  }
-  ret += _elements[_elements.size()-1]-> value() + "]";
-  }
-  else
-  {
-    ret+="]";
-  }
-  return  ret;
- }
-  string getClassName()const{return _className;}
-  
-  bool match(Term & term){
-    if(term.getClassName()=="Variable")
-    {
-        return term.match(*this);
-    }
-    else
-    {
-      List * ps = dynamic_cast<List *>(&term);
-      if (ps){
-        if(_elements.size()!= ps->_elements.size())
-          return false;
-        for(int i=0;i<_elements.size();i++){
-          if(_elements[i]->value() != ps->_elements[i]->value()){
-                if(_elements[i]->getClassName()=="Variable"||ps->_elements[i]->getClassName()=="Variable")
-                {
-                  if(_elements[i]->match(*ps->_elements[i])){
-                    continue;
-                  }
-                }
-                return false;
+  List(vector<Term *> elements = {})
+      : Term([&]() -> string {
+          if (elements.empty())
+            return "[]";
+          else
+          {
+            string symbol = "[";
+            for (int i = 0; i < elements.size() - 1; i++)
+              symbol += elements[i]->symbol() + ", ";
+            symbol += elements.back()->symbol() + "]";
+            return symbol;
           }
-        }
-
-        return true;
-      }
-      return false;
-    }
-  };
-
-  Term * head() const{
-    if(_haveElement){
-        return _elements[0];
-    }
-    throw string("Accessing head in an empty list"); 
-  };
-  List * tail() const
+        }()),
+        _elements(elements) {}
+  string value() const
   {
-    List *l;
-    vector<Term *> tails;
-    if(_haveElement){
-      for(int i=1;i<_elements.size();i++){
-        tails.push_back(_elements[i]);
-      }     
-      if(tails.size()!=0){
-        l=new List(tails);
-      }
+    if (_elements.empty())
+      return "[]";
+    else
+    {
+      string ret = "[";
+      for (int i = 0; i < _elements.size() - 1; i++)
+        ret += _elements[i]->value() + ", ";
+      ret += _elements[_elements.size() - 1]->value() + "]";
+      return ret;
+    }
+  }
+
+  bool match(Term &term)
+  {
+    List *p = dynamic_cast<List *>(&term);
+    if (p)
+    {
+      if (_elements.size() != p->_elements.size())
+        return false;
       else
       {
-        l=new List();
+        for (int i = 0; i < _elements.size(); i++)
+          if (!_elements[i]->match(*(p->_elements[i])))
+            return false;
+        return true;
       }
+    }
+    else if (term.isAssignable())
+      return term.match(*this);
+    else
+      return symbol() == term.value();
+  }
+
+  Term *findBySymbol(string symbol)
+  {
+    for (int i = 0; i < _elements.size(); i++)
+      if (_elements[i]->findBySymbol(symbol) != nullptr)
+        return _elements[i]->findBySymbol(symbol);
+    return nullptr;
+  }
+
+  Term *head() const
+  {
+    if (_elements.empty())
+      throw string("Accessing head in an empty list");
+    else
+      return _elements.front();
+  }
+  List *tail() const
+  {
+    if (_elements.empty())
+      throw string("Accessing tail in an empty list");
+    else
+    {
+      vector<Term *> tail;
+      for (int i = 1; i < _elements.size(); i++)
+        tail.push_back(_elements[i]);
+      List *l = new List(tail);
       return l;
     }
-    throw string("Accessing tail in an empty list");
-  };
+  }
+
+  Iterator<Term *> *createIterator();
+  Iterator<Term *> *createDFSIterator();
+  Iterator<Term *> *createBFSIterator();
+
 private:
   vector<Term *> _elements;
-  bool _haveElement=false;
-  string const _className;
 };
 
 #endif

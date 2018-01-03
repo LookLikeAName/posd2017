@@ -1,94 +1,93 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-#include "atom.h"
-#include "term.h"
 #include <vector>
+#include "atom.h"
+using std::vector;
 #include <string>
-
 using std::string;
 
 template <class T>
 class Iterator;
-class Struct:public Term
+template <class T>
+class DFSIterator;
+template <class T>
+class BFSIterator;
+
+class Struct : public Term
 {
 public:
-  Struct(Atom const & name):_name(name), _args(), _className("Struct"){
+  Struct(Atom name, vector<Term *> args)
+      : Term([&] {
+          if (args.empty())
+            return name.symbol() + "()";
+          else
+          {
+            string symbol = name.symbol() + "(";
+            for (int i = 0; i < args.size() - 1; i++)
+              symbol += args[i]->symbol() + ", ";
+            symbol += args.back()->symbol() + ")";
+            return symbol;
+          }
+        }()),
+        _name(name),
+        _args(args) {}
+  string value() const
+  {
+    if (arity() == 0)
+      return _name.symbol() + "()";
+    else
+    {
+      string value = _name.symbol() + "(";
+      for (int i = 0; i < _args.size() - 1; i++)
+        value += _args[i]->value() + ", ";
+      value += _args[_args.size() - 1]->value() + ")";
+      return value;
+    }
   }
-  Struct(Atom const & name, std::vector<Term *> args):_name(name), _args(args), _haveArgs(true), _className("Struct"){
-  }
-  
-  Iterator<Term *> * createIterator();
-  Iterator<Term *> * createBFSIterator();
-  Iterator<Term *> * createDFSIterator();
 
-  int arity(){
-    return _args.size();
-  }
-  Term * args(int index) {
-    return _args[index];
-  }
-
-  Atom const & name() {
-    return _name;
-  }
-    string value() const{
-        string ret =_name.symbol() + "(";
-        if(_haveArgs){
-        for(int i = 0; i < _args.size() - 1 ; i++){
-          ret += _args[i]-> value() + ", ";
-        }
-        ret += _args[_args.size()-1]-> value() + ")";
-      }
+  bool match(Term &term)
+  {
+    Struct *ps = dynamic_cast<Struct *>(&term);
+    if (ps)
+    {
+      if (!_name.match(ps->_name))
+        return false;
+      else if (_args.size() != ps->_args.size())
+        return false;
       else
       {
-        ret+=")";
-      }
-        return  ret;
-    };
-
-  string symbol() const{
-    string ret =_name.symbol() + "(";
-    if(_haveArgs){
-    for(int i = 0; i < _args.size() - 1 ; i++){
-      ret += _args[i]-> symbol() + ", ";
-    }
-    ret += _args[_args.size()-1]-> symbol() + ")";
-    }
-    else
-    {
-      ret+=")";
-    }
-    return  ret;
-  }
-  string getClassName()const{return _className;}
-  bool match(Term &term){
-    if(term.getClassName()=="Variable")
-    {
-        return term.match(*this);
-    }
-    else
-    {
-      Struct * ps = dynamic_cast<Struct *>(&term);
-      if (ps){
-        if (!_name.match(ps->_name))
-          return false;
-        if(_args.size()!= ps->_args.size())
-          return false;
-        for(int i=0;i<_args.size();i++){
-          if(_args[i]->value() != ps->_args[i]->value())
-              return false;
-        }
+        for (int i = 0; i < _args.size(); i++)
+          if (_args[i]->symbol() != ps->_args[i]->symbol())
+            return false;
         return true;
       }
-      return false;
     }
+    else if (term.isAssignable())
+      return term.match(*this);
+    else
+      return symbol() == term.value();
   }
+
+  Term *findBySymbol(string symbol)
+  {
+    for (int i = 0; i < _args.size(); i++)
+      if (_args[i]->findBySymbol(symbol) != nullptr)
+        return _args[i]->findBySymbol(symbol);
+    return nullptr;
+  }
+
+  Atom name() const { return _name; }
+  int arity() const { return _args.size(); }
+  Term *args(int index) const { return _args[index]; }
+
+  Iterator<Term *> *createIterator();
+  Iterator<Term *> *createDFSIterator();
+  Iterator<Term *> *createBFSIterator();
+
 private:
   Atom _name;
-  std::vector<Term *> _args;
-  string const _className;
-  bool _haveArgs=false;
+  const vector<Term *> _args;
 };
 
 #endif

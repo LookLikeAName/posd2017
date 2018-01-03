@@ -1,95 +1,47 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 
-#define debug 0
 #include <string>
 #include "term.h"
 using std::string;
 
-class Variable:public Term{
+class Variable : public Term
+{
 public:
-  Variable(string s) :_symbol(s), _className("Variable"){}
-  string symbol()const{return _symbol;}
-  string value()const{ 
-    if(_varMatched)
-    {
-      return _matchedVar->value();
-    }
+  Variable(string s) : Term(s), _value(nullptr) {}
+  string value() const
+  {
+    if (!_value)
+      return symbol();
     else
-    {
-      if(_assignable)
-      {
-        return _symbol;
-      }
-      return _value;
-    }
+      return _value->value();
   }
-  string getClassName()const{return _className;}
-  bool isAssignable(){return _assignable;}
-  bool match( Term &term ){   
-    if(_assignable){
-      if(term.getClassName()=="Variable"||term.getClassName()=="Struct"||term.getClassName()=="List"){
-        if(_symbol==term.symbol())
-        {
-          return true;
-        }
-        if(_varMatched)
-        {
-         return  _matchedVar->match(term);
-        }
-        else
-        {
-        _matchedVar=&term;
-        #if debug
-        std::cout<<_matchedVar->symbol()<<" "<<_matchedVar->value()<<" isVar\n";
-        #endif
-        _assignable=term.isAssignable();
-        _varMatched=true;
-        return true;
-        }
-      }
-      else
-      {
-        if(_varMatched)
-        {
-          return _matchedVar->match(term);
-        }
-        else
-        {
 
-          #if debug
-          std::cout<<"matchVar "<<_symbol<<": "<<term.value()<<"\n";
-          #endif
+  bool isAssignable() { return !_value; }
 
-          _value = term.value() ;
-        }
-       _assignable = false;
-       return true;
-      }
-    }
-    if(_varMatched)
+  bool match(Term &term)
+  {
+    if (term.findBySymbol(symbol()) != nullptr &&
+        term.findBySymbol(symbol()) != &term)
+      return false;
+    else if (&term == this)
+      return true;
+    else if (!_value)
     {
-      return term.match(*_matchedVar);
+      _value = &term;
+      return true;
     }
     else
     {
-      #if debug
-          std::cout<<"0\n";
-      #endif
-      if(term.getClassName()=="Variable")
-      {
+      if (term.isAssignable())
         return term.match(*this);
-      }
-     return _value==term.value();
+      else
+        return _value->match(term);
     }
   }
+
 private:
-  Term * _matchedVar;
-  bool _varMatched=false;
-  string const _symbol;
-  string _value;
-  bool _assignable = true;
-  string const _className;
+  Term *_value;
 };
 
 #endif
